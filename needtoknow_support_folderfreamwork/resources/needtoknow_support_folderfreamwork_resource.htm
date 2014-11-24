@@ -1,0 +1,92 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>
+needtoknow_support_folderfreamwork htmlIncludeOrString</title></head>
+<body>
+
+<@dynamichtml needtoknow_support_folderfreamwork_sample_include@>
+[[% This is a sample include. This sample outputs trace
+to the console on the "system" subject %]]
+<$trace("needtoknow_support_folderfreamwork sample include", "#console", "system")$>
+<@end@>
+
+<@dynamichtml custom_execute_ntk_security_script@>
+	<!--execute custom get NTK info service-->
+	<$executeService("GET_NTK_SCRIPT")$>
+	
+	<!--execute readSecurityScript-->
+	<$eval(readSecurityScript)$>
+	<!--execute readSecurityScript-->
+	
+	<!--execute writeSecurityScript-->
+	<$eval(writeSecurityScript)$> 
+	<!--execute writeSecurityScript-->
+	
+	<!--execute deleteSecurityScript-->
+	<$eval(deleteSecurityScript)$> 
+	<!--execute deleteSecurityScript-->
+	
+	<!-- Initialize search result flags if not set. this dynamichhtml comes from needtoknow component/resources/needtoknow_search_results_resource.htm-->
+	<$include ntk_set_search_result_flags$>
+	
+	<!--execute searchResultsScript-->
+	<$eval(searchResultsScript)$>
+	<!--execute searchResultsScript-->
+	
+	
+<@end@>
+
+<@dynamichtml fld_file_name_cell@>
+<$if url:enabled==1$><$if docInfo:link$><a href="<$docInfo:link$>"><img alt="<$xml(lc(fileAlt))$>" src="<$fileImage$>" style="vertical-align:text-bottom;border:0px;" /></a> <a class="xuiLinkText2_sm" href="<$docInfo:link$>"><$include fld_full_document_link_display_name$></a><$else$><a href="<$include fld_file_link_download_url$>"><img alt="<$xml(lc(fileAlt))$>" src="<$fileImage$>" style="vertical-align:text-bottom;border:0px;" /></a> <a class="xuiLinkText2_sm" href="<$include fld_file_link_download_url$>"><$include fld_full_document_link_display_name$></a><$endif$><$else$><img alt="<$xml(lc(fileAlt))$>" src="<$fileImage$>" style="vertical-align:text-bottom;border:0px;" /><$include fld_full_document_link_display_name$><$endif$>
+<@end@>
+<!--docInfo:image_small -->
+<@dynamichtml fld_doc_info_action_image@>
+ <$if docInfo:enabled==1$><a href="<$HttpCgiPath$>?IdcService=DOC_INFO&dID=<$dID$><$if doLimitDocInfoOptions$>&doLimitDocInfoOptions=1<$endif$><$if isFileSearchResults$>&isFileSearchResults=1<$endif$><$if doCoreContentOnly$>&coreContentOnly=1<$endif$>"><img src="<$lm_info_image$>" alt="<$stripXml(lc("wwInfo"))$>" title="<$stripXml(lc("wwInfo"))$>" height="16" width="16" border="0"></a><$else$><img src="<$docInfo:image_small$>" alt="<$stripXml(lc("wwInfo"))$>" title="<$stripXml(lc("wwInfo"))$>" height="16" width="16" border="0"><$endif$>
+<@end@>
+
+<@dynamichtml fld_prepare_file_listing_table@>
+	<$fldPinToStart("File")$>
+	<$if pinnedNumFiles$>
+		<script>
+			idc.folders.pinnedNumFiles = <$pinnedNumFiles$>;
+		</script>
+	<$endif$>
+	<$exec inc("fld_setup_file_listing_menus")$>
+	
+
+	<$if IsContributor$>
+		<$RowData.select = "<$fldCheckboxCaption = dDocName$><$include fld_file_checkbox$>"$>
+	<$endif$>
+	<!-- 根据 url:link 的值决定是否显示内容ID的URL-->
+	<$RowData.dDocName = "<$include custom_execute_ntk_security_script$><$if url:enabled==1$><a class=\"xuiLinkText2_sm\" href=\"<$if docInfo:link$><$docInfo:link$><$else$><$computeDocUrl('0', '1')$><$endif$>\"><$dDocName$></a><$else$><$dDocName$><$endif$>"$>
+	<$RowData.fFileName = "<$include fld_file_name_cell$>"$>
+	<$RowData.dDocTitle = "<$dDocTitle$>"$>
+	<$RowData.dInDate = "<$dInDate$>"$>
+	<$RowData.dDocAuthor = "<$dDocAuthor$>"$>
+	<$RowData.actions = "<$include fld_file_table_actions_column$>"$>
+	
+	<$include fld_custom_prepare_file_listing_table$>
+	
+	<$rowIncludeName = "fld_file_row_include"$>
+	<$exec inc("create_slim_table_row_include")$>
+	<$rowIncludeName = ""$>
+<@end@>
+
+<@dynamichtml fld_file_table_actions_column@>
+	
+	<$if IsContributor$>
+		<$include fld_file_listing_menu$>
+		
+		<$if isTrue(#active.fIsInWorkflowQueue)$>
+			<a href="<$HttpCgiPath$>?IdcService=REVIEW_WORKFLOW_DOC&dDocName=<$url(dDocName)$><$if doCoreContentOnly$>&coreContentOnly=1<$endif$>" target="_blank"><img alt="<$xml(lc("wwWorkflowReview"))$>" title="<$xml(lc("wwWorkflowReview"))$>" src="<$lm_review_content_img$>" height="16" width="16" border="0"></a>
+		<$endif$>
+	<$endif$>
+	<$include fld_doc_info_action_image$>
+	<!--Fix for bug 14629357. Custom search result icons are added to the
+		files of a framework folder.-->
+	<$include custom_search_result_link_icons$>
+<@end@>
+
+</body>
+</html>

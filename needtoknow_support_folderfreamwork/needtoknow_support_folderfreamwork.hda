@@ -1,0 +1,43 @@
+﻿<?hda version="11.1.1.8.1DEV-2014-01-06 04:18:30Z-r114490" jcharset="UTF8" encoding="utf-8"?>
+@Properties LocalData
+ComponentName=needtoknow_support_folderfreamwork
+blDateFormat=yyyy-M-d {H:mm[:ss] {aa} [zz]}!m上午,下午!tEtc/GMT+8
+hasPreferenceData=0
+preventAdditionalComponentDowngrade=0
+version=2014_11_20(工作版本 1)
+@end
+@ResultSet ClassAliases
+3
+classname
+location
+loadOrder
+@end
+@ResultSet Filters
+4
+type
+location
+parameter
+loadOrder
+@end
+@ResultSet ResourceDefinition
+4
+type
+filename
+tables
+loadOrder
+resource
+resources/needtoknow_support_folderfreamwork_resource.htm
+null
+99999
+service
+resources/needtoknow_support_folderfreamwork_service.htm
+needtoknow_support_folderfreamwork_Services
+99999
+@end
+@ResultSet MergeRules
+4
+fromTable
+toTable
+column
+loadOrder
+@end
